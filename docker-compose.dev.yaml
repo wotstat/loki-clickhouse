@@ -1,0 +1,29 @@
+# docker compose down; docker compose up --build --remove-orphans;
+
+services:
+  clickhouse:
+    container_name: clickhouse
+    restart: always
+    image: clickhouse/clickhouse-server:24.10-alpine
+    volumes:
+      - ../clickhouse-loki/data:/var/lib/clickhouse
+      - ../clickhouse-loki/log:/var/log/clickhouse-server
+    ports:
+      - '8123:8123'
+    environment:
+      - CLICKHOUSE_PASSWORD
+
+  loki-clickhouse:
+    container_name: loki-clickhouse
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+    environment:
+      - CLICKHOUSE_URL=http://clickhouse:8123
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD
+      - PORT=3000

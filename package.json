@@ -1,0 +1,20 @@
+{
+  "name": "lokiclickhouse",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev:docker": "docker compose -f docker-compose.dev.yaml down; docker compose -f docker-compose.dev.yaml up --build"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.13"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@clickhouse/client": "^1.8.1",
+    "@hono/zod-validator": "^0.4.1",
+    "hono": "^4.6.10",
+    "zod": "^3.23.8"
+  }
+}

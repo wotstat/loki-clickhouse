@@ -1,0 +1,27 @@
+# docker compose down; docker compose up --build --remove-orphans;
+
+services:
+  loki-clickhouse:
+    container_name: loki-clickhouse
+    restart: always
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 9106:3000
+    environment:
+      - CLICKHOUSE_URL=http://host.docker.internal:8123
+      - CLICKHOUSE_USER
+      - CLICKHOUSE_PASSWORD
+      - PORT=3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      bridge:
+        ipv4_address: 172.27.0.10
+
+networks:
+  bridge:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.27.0.0/16

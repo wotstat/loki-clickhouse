@@ -1,0 +1,42 @@
+name: deployment
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy .env
+        env:
+          DOTENV: ${{ secrets.DOTENV }}
+        run: cat <<< "$DOTENV" > ./.env
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/production.key
+          chmod 600 ~/.ssh/production.key
+          cat >>~/.ssh/config <<END
+          Host node
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/production.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Copy to server
+        run: rsync -avz ./ node:/${{ vars.APP_PATH }}
+
+      - name: Run deploy script
+        run: ssh node "cd ${{ vars.APP_PATH }}; bash rerun.sh"
