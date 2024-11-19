@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package loki;
+
+import "google/protobuf/timestamp.proto";
+
+message PushRequest {
+  repeated StreamAdapter streams = 1;
+}
+
+message StreamAdapter {
+  string labels = 1;
+  repeated EntryAdapter entries = 2;
+  uint64 hash = 3;
+}
+
+message EntryAdapter {
+  google.protobuf.Timestamp timestamp = 1;
+  string line = 2;
+  repeated LabelPairAdapter structuredMetadata = 3;
+}
+
+message LabelPairAdapter {
+  string name = 1;
+  string value = 2;
+}

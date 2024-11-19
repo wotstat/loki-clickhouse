@@ -3,10 +3,13 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev:docker": "docker compose -f docker-compose.dev.yaml down; docker compose -f docker-compose.dev.yaml up --build"
+    "dev:docker": "docker compose -f docker-compose.dev.yaml down; docker compose -f docker-compose.dev.yaml up --build",
+    "build-proto": "protoc --plugin=\"protoc-gen-ts=$(which protoc-gen-ts)\" --ts_out=\"./src/generated\" --proto_path=\"./proto\" ./proto/*.proto"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.13"
+    "@types/bun": "^1.1.13",
+    "@types/snappyjs": "^0.7.1",
+    "@types/google-protobuf": "^3.15.12"
   },
   "peerDependencies": {
     "typescript": "^5.6.3"
@@ -14,7 +17,9 @@
   "dependencies": {
     "@clickhouse/client": "^1.8.1",
     "@hono/zod-validator": "^0.4.1",
+    "google-protobuf": "^3.21.4",
     "hono": "^4.6.10",
+    "snappyjs": "^0.7.0",
     "zod": "^3.23.8"
   }
 }
