@@ -10,6 +10,7 @@ services:
       - ../clickhouse-loki/log:/var/log/clickhouse-server
     ports:
       - '8123:8123'
+      - '9000:9000'
     environment:
       - CLICKHOUSE_PASSWORD
     logging:
