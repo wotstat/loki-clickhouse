@@ -7,13 +7,13 @@ services:
     build:
       dockerfile: Dockerfile
     ports:
-      - 3100:3000
+      - 3100:3100
     environment:
       - CLICKHOUSE_URL=http://host.docker.internal:8123
       - CLICKHOUSE_USER
       - CLICKHOUSE_PASSWORD
       - CLICKHOUSE_DATABASE=Statistics
-      - PORT=3000
+      - PORT=3100
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
