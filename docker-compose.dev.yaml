@@ -2,24 +2,20 @@
 
 services:
   clickhouse:
-    container_name: clickhouse
     restart: always
     image: clickhouse/clickhouse-server:24.10-alpine
     volumes:
       - ../clickhouse-loki/data:/var/lib/clickhouse
       - ../clickhouse-loki/log:/var/log/clickhouse-server
     ports:
-      - '8123:8123'
+      - '8125:8123'
       - '9000:9000'
     environment:
       - CLICKHOUSE_PASSWORD
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://localhost:3000/loki/api/v1/push"
+    networks:
+      - default
 
   loki-clickhouse:
-    container_name: loki-clickhouse
     restart: always
     build:
       dockerfile: Dockerfile.dev
@@ -33,3 +29,11 @@ services:
       - CLICKHOUSE_PASSWORD
       - CLICKHOUSE_DATABASE=Statistics
       - PORT=3000
+    networks:
+      - default
+      - shared_loki
+
+networks:
+  shared_loki:
+    name: shared_loki
+    driver: bridge
