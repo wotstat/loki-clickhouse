@@ -14,6 +14,10 @@ app.use(cors());
 
 const targetTable = `${Bun.env.CLICKHOUSE_DATABASE ?? 'Logs'}.Loki`;
 
+app.get('/ready', c => {
+  return c.text('OK')
+});
+
 app.post('/loki/api/v1/push',
   async (c, next) => {
     const contentType = c.req.header('content-type');
