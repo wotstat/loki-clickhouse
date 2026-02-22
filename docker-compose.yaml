@@ -19,6 +19,7 @@ services:
       bridge:
         ipv4_address: 172.27.0.10
       shared_loki: {}
+      loki_event_saver: {}
 
 networks:
   bridge:
@@ -26,6 +27,11 @@ networks:
     ipam:
       config:
         - subnet: 172.27.0.0/16
+
+  # Shared network not used by default
   shared_loki:
     name: shared_loki
-    driver: bridge
+
+  # Shared network used by event-saver
+  loki_event_saver:
+    name: loki_event_saver
